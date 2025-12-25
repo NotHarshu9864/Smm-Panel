@@ -5,78 +5,85 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Harsh SMM • Login</title>
 
-<!-- Tailwind CDN -->
+<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Tailwind config -->
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#2563eb'
-      }
-    }
-  }
-}
-</script>
+<!-- Firebase v8 -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 
 <body class="min-h-screen bg-slate-100 flex items-center justify-center">
 
 <div class="w-full max-w-md px-4">
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-6 relative overflow-hidden">
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
 
     <!-- HEADER -->
-    <h1 class="text-xl font-semibold text-slate-900">Harsh SMM</h1>
-    <p class="text-sm text-slate-500 mt-1" id="formTitle">
-      Login to your dashboard
-    </p>
+    <div class="flex items-center gap-2">
+      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2"/>
+      </svg>
+      <h1 class="text-xl font-semibold">Harsh SMM</h1>
+    </div>
+    <p class="text-sm text-slate-500 mt-1" id="formTitle">Login to your dashboard</p>
 
     <!-- LOGIN FORM -->
-    <form id="loginForm" class="mt-6 space-y-4 transition-all duration-300">
+    <form id="loginForm" class="mt-6 space-y-4">
       <div>
-        <label class="text-sm font-medium text-slate-700">Email</label>
-        <input type="email" id="loginEmail" required
-          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+        <label class="text-sm font-medium">Email</label>
+        <input id="loginEmail" type="email" required
+          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
+                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
       </div>
 
       <div>
-        <label class="text-sm font-medium text-slate-700">Password</label>
-        <input type="password" id="loginPassword" required
-          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+        <label class="text-sm font-medium">Password</label>
+        <input id="loginPassword" type="password" required
+          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
+                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
       </div>
 
-      <button
-        class="w-full h-10 rounded-lg bg-primary text-white text-sm font-medium
-               hover:bg-blue-700 transition">
+      <button class="w-full h-10 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
         Login
       </button>
     </form>
 
     <!-- REGISTER FORM -->
-    <form id="registerForm"
-      class="mt-6 space-y-4 absolute left-0 right-0 opacity-0 pointer-events-none
-             translate-x-6 transition-all duration-300">
+    <form id="registerForm" class="mt-6 space-y-4 hidden">
       <div>
-        <label class="text-sm font-medium text-slate-700">Email</label>
-        <input type="email" id="registerEmail" required
-          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+        <label class="text-sm font-medium">Full Name</label>
+        <input id="regName" required
+          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
+                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
       </div>
 
       <div>
-        <label class="text-sm font-medium text-slate-700">Password</label>
-        <input type="password" id="registerPassword" required
-          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
-                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+        <label class="text-sm font-medium">Email</label>
+        <input id="regEmail" type="email" required
+          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
+                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
       </div>
 
-      <button
-        class="w-full h-10 rounded-lg bg-primary text-white text-sm font-medium
-               hover:bg-blue-700 transition">
+      <div>
+        <label class="text-sm font-medium">Password</label>
+        <input id="regPass" type="password" required
+          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
+                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="text-sm font-medium">Confirm Password</label>
+        <input id="regConfirm" type="password" required
+          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
+                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
+      </div>
+
+      <button class="w-full h-10 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
         Create Account
       </button>
     </form>
@@ -87,50 +94,37 @@ tailwind.config = {
     <!-- TOGGLE -->
     <div class="mt-6 text-center text-sm text-slate-600">
       <span id="toggleText">Don’t have an account?</span>
-      <button id="toggleBtn" class="text-primary font-medium ml-1">
-        Register
-      </button>
+      <button id="toggleBtn" class="text-blue-600 font-medium ml-1">Register</button>
     </div>
   </div>
 
-  <p class="text-center text-xs text-slate-400 mt-4">
-    © Harsh SMM
-  </p>
+  <p class="text-center text-xs text-slate-400 mt-4">© Harsh SMM</p>
 </div>
 
-<!-- FIREBASE + JS -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-/* 🔥 REPLACE WITH YOUR CONFIG */
+<script>
+/* 🔥 FIREBASE CONFIG (YOURS) */
 const firebaseConfig = {
-    apiKey: "AIzaSyBvsZp41z8CvSWmiZoCvtWUU2rYmUoG7Uc",
-    authDomain: "harshsmm.firebaseapp.com",
-    projectId: "harshsmm",
-    storageBucket: "harshsmm.firebasestorage.app",
-    messagingSenderId: "776315099973",
-    appId: "1:776315099973:web:760da4aad2eb99a716fc2c"
-  };
+  apiKey: "AIzaSyBvsZp41z8CvSWmiZoCvtWUU2rYmUoG7Uc",
+  authDomain: "harshsmm.firebaseapp.com",
+  projectId: "harshsmm",
+  storageBucket: "harshsmm.firebasestorage.app",
+  messagingSenderId: "776315099973",
+  appId: "1:776315099973:web:760da4aad2eb99a716fc2c"
+};
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 /* AUTO LOGIN */
-onAuthStateChanged(auth, user => {
+auth.onAuthStateChanged(user => {
   if (user) {
     localStorage.setItem("userEmail", user.email);
     location.href = "new-order.html";
   }
 });
 
-/* ELEMENTS */
+/* TOGGLE */
 const loginForm = document.getElementById("loginForm");
 const registerForm = document.getElementById("registerForm");
 const toggleBtn = document.getElementById("toggleBtn");
@@ -138,61 +132,58 @@ const toggleText = document.getElementById("toggleText");
 const formTitle = document.getElementById("formTitle");
 const authMsg = document.getElementById("authMsg");
 
-let isLogin = true;
-
-/* TOGGLE ANIMATION */
 toggleBtn.onclick = () => {
   authMsg.textContent = "";
+  loginForm.classList.toggle("hidden");
+  registerForm.classList.toggle("hidden");
 
-  if (isLogin) {
-    loginForm.classList.add("opacity-0", "pointer-events-none", "-translate-x-6");
-    registerForm.classList.remove("opacity-0", "pointer-events-none", "translate-x-6");
-    formTitle.textContent = "Create a new account";
-    toggleText.textContent = "Already have an account?";
-    toggleBtn.textContent = "Login";
-  } else {
-    registerForm.classList.add("opacity-0", "pointer-events-none", "translate-x-6");
-    loginForm.classList.remove("opacity-0", "pointer-events-none", "-translate-x-6");
-    formTitle.textContent = "Login to your dashboard";
-    toggleText.textContent = "Don’t have an account?";
-    toggleBtn.textContent = "Register";
-  }
-
-  isLogin = !isLogin;
+  const isLogin = !loginForm.classList.contains("hidden");
+  formTitle.textContent = isLogin ? "Login to your dashboard" : "Create a new account";
+  toggleText.textContent = isLogin ? "Don’t have an account?" : "Already have an account?";
+  toggleBtn.textContent = isLogin ? "Register" : "Login";
 };
 
 /* LOGIN */
 loginForm.onsubmit = e => {
   e.preventDefault();
-  authMsg.textContent = "Logging in...";
+  authMsg.textContent = "Checking credentials...";
 
-  signInWithEmailAndPassword(
-    auth,
+  auth.signInWithEmailAndPassword(
     loginEmail.value,
     loginPassword.value
   )
-  .then(res => {
-    localStorage.setItem("userEmail", res.user.email);
-    location.href = "new-order.html";
-  })
-  .catch(err => authMsg.textContent = err.message);
+  .then(() => location.href = "new-order.html")
+  .catch(err => {
+    if (err.code === "auth/user-not-found")
+      authMsg.textContent = "User does not exist";
+    else if (err.code === "auth/wrong-password")
+      authMsg.textContent = "Invalid password";
+    else
+      authMsg.textContent = err.message;
+  });
 };
 
 /* REGISTER */
 registerForm.onsubmit = e => {
   e.preventDefault();
-  authMsg.textContent = "Creating account...";
+  authMsg.textContent = "";
 
-  createUserWithEmailAndPassword(
-    auth,
-    registerEmail.value,
-    registerPassword.value
-  )
-  .then(res => {
-    localStorage.setItem("userEmail", res.user.email);
-    location.href = "new-order.html";
-  })
-  .catch(err => authMsg.textContent = err.message);
+  if (regPass.value !== regConfirm.value) {
+    authMsg.textContent = "Passwords do not match";
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(regEmail.value, regPass.value)
+    .then(cred => {
+      return db.collection("users").doc(cred.user.uid).set({
+        name: regName.value,
+        email: regEmail.value,
+        balance: 0,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    })
+    .then(() => location.href = "new-order.html")
+    .catch(err => authMsg.textContent = err.message);
 };
 </script>
 
