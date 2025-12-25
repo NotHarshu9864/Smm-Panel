@@ -3,201 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login • Harsh SMM</title>
+<title>Harsh SMM • Login</title>
 
-<style>
-/* ===== RESET ===== */
-* {
-  box-sizing: border-box;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-}
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
 
-/* ===== COLORS ===== */
-:root {
-  --primary: #2563eb;
-  --text: #0f172a;
-  --muted: #64748b;
-  --border: #e5e7eb;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --error: #dc2626;
+<!-- Tailwind config -->
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2563eb'
+      }
+    }
+  }
 }
-
-/* ===== PAGE ===== */
-body {
-  margin: 0;
-  background: var(--bg);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ===== LOGIN CARD ===== */
-.login-wrapper {
-  width: 100%;
-  max-width: 380px;
-  padding: 16px;
-}
-
-.login-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 24px;
-}
-
-/* ===== HEADER ===== */
-.login-title {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.login-sub {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 4px;
-}
-
-/* ===== FORM ===== */
-.form-group {
-  margin-top: 16px;
-}
-
-label {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-input {
-  width: 100%;
-  margin-top: 6px;
-  padding: 11px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  font-size: 14px;
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-/* ===== BUTTON ===== */
-button {
-  width: 100%;
-  height: 42px;
-  margin-top: 20px;
-  border: none;
-  border-radius: 6px;
-  background: var(--primary);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-/* ===== MESSAGE ===== */
-#authMsg {
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--error);
-}
-
-/* ===== FOOTER ===== */
-.footer {
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 18px;
-}
-</style>
+</script>
 </head>
 
-<body>
+<body class="min-h-screen bg-slate-100 flex items-center justify-center">
 
-<div class="login-wrapper">
-  <div class="login-card">
-    <h1 class="login-title">🔐 Harsh SMM Login</h1>
-    <div class="login-sub">Access your SMM dashboard</div>
+<div class="w-full max-w-md px-4">
+  <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-6 relative overflow-hidden">
 
-    <form id="loginForm">
-      <div class="form-group">
-        <label>Email address</label>
-        <input type="email" id="email" required>
+    <!-- HEADER -->
+    <h1 class="text-xl font-semibold text-slate-900">Harsh SMM</h1>
+    <p class="text-sm text-slate-500 mt-1" id="formTitle">
+      Login to your dashboard
+    </p>
+
+    <!-- LOGIN FORM -->
+    <form id="loginForm" class="mt-6 space-y-4 transition-all duration-300">
+      <div>
+        <label class="text-sm font-medium text-slate-700">Email</label>
+        <input type="email" id="loginEmail" required
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
       </div>
 
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="password" required>
+      <div>
+        <label class="text-sm font-medium text-slate-700">Password</label>
+        <input type="password" id="loginPassword" required
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
       </div>
 
-      <button type="submit" id="loginBtn">Login</button>
-      <div id="authMsg"></div>
+      <button
+        class="w-full h-10 rounded-lg bg-primary text-white text-sm font-medium
+               hover:bg-blue-700 transition">
+        Login
+      </button>
     </form>
+
+    <!-- REGISTER FORM -->
+    <form id="registerForm"
+      class="mt-6 space-y-4 absolute left-0 right-0 opacity-0 pointer-events-none
+             translate-x-6 transition-all duration-300">
+      <div>
+        <label class="text-sm font-medium text-slate-700">Email</label>
+        <input type="email" id="registerEmail" required
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+      </div>
+
+      <div>
+        <label class="text-sm font-medium text-slate-700">Password</label>
+        <input type="password" id="registerPassword" required
+          class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+      </div>
+
+      <button
+        class="w-full h-10 rounded-lg bg-primary text-white text-sm font-medium
+               hover:bg-blue-700 transition">
+        Create Account
+      </button>
+    </form>
+
+    <!-- MESSAGE -->
+    <p id="authMsg" class="mt-4 text-sm text-red-600"></p>
+
+    <!-- TOGGLE -->
+    <div class="mt-6 text-center text-sm text-slate-600">
+      <span id="toggleText">Don’t have an account?</span>
+      <button id="toggleBtn" class="text-primary font-medium ml-1">
+        Register
+      </button>
+    </div>
   </div>
 
-  <div class="footer">© Harsh SMM</div>
+  <p class="text-center text-xs text-slate-400 mt-4">
+    © Harsh SMM
+  </p>
 </div>
 
-<!-- ===== FIREBASE + JS ===== -->
+<!-- FIREBASE + JS -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getAuth, 
-  signInWithEmailAndPassword, 
-  onAuthStateChanged 
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* 🔥 REPLACE WITH YOUR FIREBASE CONFIG */
+/* 🔥 REPLACE WITH YOUR CONFIG */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
-};
+    apiKey: "AIzaSyBvsZp41z8CvSWmiZoCvtWUU2rYmUoG7Uc",
+    authDomain: "harshsmm.firebaseapp.com",
+    projectId: "harshsmm",
+    storageBucket: "harshsmm.firebasestorage.app",
+    messagingSenderId: "776315099973",
+    appId: "1:776315099973:web:760da4aad2eb99a716fc2c"
+  };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
 /* AUTO LOGIN */
 onAuthStateChanged(auth, user => {
   if (user) {
     localStorage.setItem("userEmail", user.email);
-    window.location.href = "new-order.html";
+    location.href = "new-order.html";
   }
 });
 
-/* LOGIN HANDLER */
-const form = document.getElementById("loginForm");
-const msg = document.getElementById("authMsg");
-const btn = document.getElementById("loginBtn");
+/* ELEMENTS */
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+const toggleBtn = document.getElementById("toggleBtn");
+const toggleText = document.getElementById("toggleText");
+const formTitle = document.getElementById("formTitle");
+const authMsg = document.getElementById("authMsg");
 
-form.addEventListener("submit", e => {
+let isLogin = true;
+
+/* TOGGLE ANIMATION */
+toggleBtn.onclick = () => {
+  authMsg.textContent = "";
+
+  if (isLogin) {
+    loginForm.classList.add("opacity-0", "pointer-events-none", "-translate-x-6");
+    registerForm.classList.remove("opacity-0", "pointer-events-none", "translate-x-6");
+    formTitle.textContent = "Create a new account";
+    toggleText.textContent = "Already have an account?";
+    toggleBtn.textContent = "Login";
+  } else {
+    registerForm.classList.add("opacity-0", "pointer-events-none", "translate-x-6");
+    loginForm.classList.remove("opacity-0", "pointer-events-none", "-translate-x-6");
+    formTitle.textContent = "Login to your dashboard";
+    toggleText.textContent = "Don’t have an account?";
+    toggleBtn.textContent = "Register";
+  }
+
+  isLogin = !isLogin;
+};
+
+/* LOGIN */
+loginForm.onsubmit = e => {
   e.preventDefault();
-  btn.disabled = true;
-  msg.textContent = "Logging in...";
+  authMsg.textContent = "Logging in...";
 
   signInWithEmailAndPassword(
     auth,
-    email.value,
-    password.value
+    loginEmail.value,
+    loginPassword.value
   )
   .then(res => {
     localStorage.setItem("userEmail", res.user.email);
-    window.location.href = "new-order.html";
+    location.href = "new-order.html";
   })
-  .catch(err => {
-    msg.textContent = err.message;
-    btn.disabled = false;
-  });
-});
+  .catch(err => authMsg.textContent = err.message);
+};
+
+/* REGISTER */
+registerForm.onsubmit = e => {
+  e.preventDefault();
+  authMsg.textContent = "Creating account...";
+
+  createUserWithEmailAndPassword(
+    auth,
+    registerEmail.value,
+    registerPassword.value
+  )
+  .then(res => {
+    localStorage.setItem("userEmail", res.user.email);
+    location.href = "new-order.html";
+  })
+  .catch(err => authMsg.textContent = err.message);
+};
 </script>
 
 </body>
