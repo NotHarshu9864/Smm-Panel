@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Batch | Nova PW</title>
+<title>Batch Overview</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <script>
 tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        borderp:"#8b5cf6",
-        textdim:"#9ca3af"
+  theme:{
+    extend:{
+      colors:{
+        accent:"#8b5cf6",
+        muted:"#9ca3af",
+        panel:"#0b0b0f"
       }
     }
   }
@@ -21,111 +22,155 @@ tailwind.config = {
 </script>
 
 <style>
-body{background:#000;user-select:none}
+body{background:#000}
 .card{transition:.25s}
-.card:hover{transform:translateY(-4px);box-shadow:0 0 12px rgba(139,92,246,.35)}
-.tab{padding-bottom:.5rem}
+.card:hover{transform:translateY(-4px);box-shadow:0 0 18px rgba(139,92,246,.35)}
 .tab.active{border-bottom:2px solid #8b5cf6}
+.fade{animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
 </style>
 </head>
 
 <body class="text-white">
 
+<!-- HEADER -->
+<div class="border-b border-white/10 bg-black sticky top-0 z-40">
+  <div class="max-w-6xl mx-auto px-5 py-4">
+    <h1 class="text-xl font-semibold">Home / Batch Overview</h1>
+    <div id="breadcrumb" class="text-sm text-muted mt-1"></div>
+  </div>
+</div>
+
 <div class="max-w-6xl mx-auto px-5 py-6">
 
-<!-- TITLE -->
-<h1 id="batchName" class="text-3xl font-bold mb-4"></h1>
-
-<!-- THUMB -->
-<img id="batchThumb" class="rounded-xl mb-6 border border-borderp hidden">
+<!-- BATCH HEADER -->
+<h2 id="batchName" class="text-3xl font-bold mb-4"></h2>
+<img id="batchThumb" class="rounded-xl border border-white/10 mb-6 hidden">
 
 <!-- TABS -->
-<div class="flex gap-6 border-b border-borderp/40 mb-6">
+<div class="flex gap-6 border-b border-white/10 mb-6">
   <button class="tab active" onclick="openTab('about',this)">About</button>
   <button class="tab" onclick="openTab('video',this)">Video</button>
   <button class="tab" onclick="openTab('notes',this)">Notes</button>
   <button class="tab" onclick="openTab('dpp',this)">DPP</button>
 </div>
 
-<!-- CONTENT -->
-<div id="content"></div>
+<div id="content" class="fade"></div>
 
 </div>
 
 <script>
 const batch = new URLSearchParams(location.search).get("id");
-let batchData = {};
-let subjects = [];
-let currentType = "about";
+const content = document.getElementById("content");
+const breadcrumb = document.getElementById("breadcrumb");
 
-/* LOAD ABOUT */
+let batchData={}, subjects=[], currentTab="about";
+
+/* ---------- HELPERS ---------- */
+function setBreadcrumb(arr){
+  breadcrumb.innerHTML = arr.join(" <span class='text-muted'>›</span> ");
+}
+
+function emptyState(msg){
+  content.innerHTML = `
+    <div class="text-center text-muted py-16">
+      <div class="text-5xl mb-4">📭</div>
+      <p class="text-lg">${msg}</p>
+    </div>`;
+}
+
+/* ---------- LOAD BATCH ---------- */
+if(!batch){
+  document.body.innerHTML = `<div class="h-screen flex items-center justify-center text-2xl text-red-500">BATCH NOT FOUND</div>`;
+  throw "";
+}
+
 fetch(`/data/batches/${batch}/about.json`)
-.then(r=>r.json())
+.then(r=>{
+  if(!r.ok) throw "notfound";
+  return r.json();
+})
 .then(d=>{
-  batchData = d;
-  subjects = d.subjects;
+  batchData=d;
+  subjects=d.subjects||[];
 
-  batchName.innerText = d.name;
-  batchThumb.src = d.thumbnail;
+  batchName.innerText=d.name;
+  batchThumb.src=d.thumbnail;
   batchThumb.classList.remove("hidden");
 
+  setBreadcrumb(["Home", d.name, "About"]);
   showAbout();
+})
+.catch(()=>{
+  document.body.innerHTML = `<div class="h-screen flex items-center justify-center text-2xl text-red-500">BATCH NOT FOUND</div>`;
 });
 
-/* TAB HANDLER */
-function openTab(type,btn){
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+/* ---------- TABS ---------- */
+function openTab(tab,btn){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  currentType = type;
+  currentTab=tab;
 
-  if(type==="about") showAbout();
-  else showSubjects(type);
+  if(tab==="about"){
+    setBreadcrumb(["Home", batchData.name, "About"]);
+    showAbout();
+  }else{
+    setBreadcrumb(["Home", batchData.name, tab.toUpperCase()]);
+    showSubjects(tab);
+  }
 }
 
-/* ABOUT */
+/* ---------- ABOUT ---------- */
 function showAbout(){
-  content.innerHTML = `
-    <p class="text-textdim max-w-3xl leading-relaxed">
-      ${batchData.description}
-    </p>`;
+  content.innerHTML=`
+    <p class="max-w-3xl text-muted leading-relaxed">${batchData.description}</p>`;
 }
 
-/* SUBJECTS */
+/* ---------- SUBJECT LIST ---------- */
 function showSubjects(type){
-  content.innerHTML = `
+  if(!subjects.length) return emptyState("Content Not Found");
+
+  content.innerHTML=`
+    <h3 class="text-xl font-semibold mb-4">${type.toUpperCase()}</h3>
     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
       ${subjects.map(s=>`
-        <div onclick="openSubject('${type}','${s}')"
-             class="card border border-borderp rounded-xl p-4 cursor-pointer text-center">
+        <div class="card p-4 border border-white/10 rounded-xl cursor-pointer text-center"
+             onclick="openSubject('${type}','${s}')">
           ${s.toUpperCase()}
         </div>`).join("")}
     </div>`;
 }
 
-/* SUBJECT → CHAPTER → ITEMS */
+/* ---------- SUBJECT → CHAPTER ---------- */
 function openSubject(type,subject){
+  setBreadcrumb(["Home", batchData.name, type.toUpperCase(), subject.toUpperCase()]);
+
   fetch(`/data/batches/${batch}/${type}/${subject}.json`)
-  .then(r=>r.json())
+  .then(r=>r.ok?r.json():null)
   .then(d=>{
-    content.innerHTML = `<h2 class="text-xl font-semibold mb-4">${d.subject}</h2>`;
+    if(!d||!d.chapters.length) return emptyState("Content Not Found");
+
+    content.innerHTML=`<h3 class="text-xl font-semibold mb-4">${d.subject}</h3>`;
 
     d.chapters.forEach(ch=>{
-      content.innerHTML += `
-        <div class="border border-borderp/40 rounded-lg p-3 mb-3">
+      content.innerHTML+=`
+        <div class="border border-white/10 rounded-lg p-4 mb-3">
           <div class="font-medium cursor-pointer"
                onclick="this.nextElementSibling.classList.toggle('hidden')">
             ${ch.name}
           </div>
 
           <div class="hidden mt-3 space-y-2">
-            ${ch.items.map(i=>`
-              <div class="flex justify-between items-center text-sm text-textdim">
-                <span>${i.title}</span>
-                <a href="${i.link}"
-                   class="border border-borderp px-3 py-0.5 rounded hover:bg-borderp hover:text-black transition">
-                   Open
-                </a>
-              </div>`).join("")}
+            ${ch.items?.length
+              ? ch.items.map(i=>`
+                <div class="flex justify-between items-center text-sm text-muted">
+                  <span>${i.title}</span>
+                  <a href="${i.link}"
+                     class="border border-accent px-3 py-0.5 rounded hover:bg-accent hover:text-black transition">
+                     Open
+                  </a>
+                </div>`).join("")
+              : `<p class="text-muted text-sm">Content Not Found</p>`}
           </div>
         </div>`;
     });
