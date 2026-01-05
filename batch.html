@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Batch Overview | Nova PW</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        borderp: "#8b5cf6",
+        textdim: "#9ca3af"
+      }
+    }
+  }
+}
+</script>
+
+<style>
+body { background:#000; user-select:none; }
+img { pointer-events:none; }
+
+/* Tabs */
+.tab {
+  border-bottom:2px solid transparent;
+}
+.tab.active {
+  border-color:#8b5cf6;
+  color:white;
+}
+
+/* Cards */
+.card {
+  transition:.25s ease;
+}
+.card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 0 12px rgba(139,92,246,.35);
+}
+</style>
+</head>
+
+<body class="text-white">
+
+<!-- HEADER -->
+<header class="border-b border-borderp/40">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <h1 class="text-3xl font-bold">Batch Overview</h1>
+  </div>
+</header>
+
+<!-- BATCH INFO -->
+<section class="max-w-7xl mx-auto px-6 py-6">
+  <div class="border border-borderp rounded-xl p-4 md:flex gap-6">
+    <img src="https://via.placeholder.com/600x340"
+         class="w-full md:w-80 rounded-lg object-cover">
+
+    <div>
+      <h2 class="text-2xl font-semibold mb-2">Class 10 Science Batch</h2>
+      <p class="text-textdim text-sm">
+        Complete syllabus coverage with expert faculty, recorded lectures,
+        notes, and daily practice problems.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- TABS -->
+<section class="max-w-7xl mx-auto px-6">
+  <div class="flex gap-6 border-b border-borderp/40 text-sm">
+    <button class="tab active pb-2" onclick="openTab('about')">About</button>
+    <button class="tab pb-2" onclick="openTab('video')">Video</button>
+    <button class="tab pb-2" onclick="openTab('notes')">Notes</button>
+    <button class="tab pb-2" onclick="openTab('dpp')">DPP</button>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="max-w-7xl mx-auto px-6 py-6">
+
+<!-- ABOUT -->
+<div id="about" class="tab-content">
+  <p class="text-textdim leading-relaxed max-w-3xl">
+    This batch is designed for Class 10 students aiming to master Science.
+    It includes conceptual videos, chapter-wise notes, and daily practice
+    problems to strengthen fundamentals and exam performance.
+  </p>
+</div>
+
+<!-- VIDEO -->
+<div id="video" class="tab-content hidden space-y-6">
+
+  <!-- SUBJECT -->
+  <div class="border border-borderp rounded-xl p-4">
+    <h3 class="font-semibold mb-4">Physics</h3>
+
+    <!-- CHAPTER -->
+    <div class="border border-borderp/40 rounded-lg p-3 mb-3">
+      <h4 class="text-sm font-medium mb-2">Motion</h4>
+
+      <!-- LECTURES -->
+      <ul class="text-sm text-textdim space-y-1">
+        <li>• Lecture 1: Introduction</li>
+        <li>• Lecture 2: Equations of Motion</li>
+        <li>• Lecture 3: Graphs</li>
+      </ul>
+    </div>
+
+    <div class="border border-borderp/40 rounded-lg p-3">
+      <h4 class="text-sm font-medium mb-2">Force & Laws</h4>
+      <ul class="text-sm text-textdim space-y-1">
+        <li>• Lecture 1: Newton Laws</li>
+        <li>• Lecture 2: Applications</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- NOTES -->
+<div id="notes" class="tab-content hidden space-y-6">
+  <div class="border border-borderp rounded-xl p-4">
+    <h3 class="font-semibold mb-4">Physics Notes</h3>
+
+    <div class="border border-borderp/40 rounded-lg p-3">
+      <h4 class="text-sm mb-2">Motion</h4>
+      <ul class="text-sm text-textdim">
+        <li>• Motion Full Notes (PDF)</li>
+        <li>• Formula Sheet</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- DPP -->
+<div id="dpp" class="tab-content hidden space-y-6">
+  <div class="border border-borderp rounded-xl p-4">
+    <h3 class="font-semibold mb-4">Physics DPP</h3>
+
+    <div class="border border-borderp/40 rounded-lg p-3">
+      <h4 class="text-sm mb-2">Motion</h4>
+      <ul class="text-sm text-textdim">
+        <li>• DPP 01</li>
+        <li>• DPP 02</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<script>
+function openTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+  document.getElementById(tab).classList.remove('hidden');
+
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
