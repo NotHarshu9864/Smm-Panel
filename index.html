@@ -1,149 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Nova PW</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Nova PW</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
-  <!-- Icons -->
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            borderp: "#8b5cf6",
-            textdim: "#9ca3af"
-          }
-        }
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        borderp: "#8b5cf6",
+        textdim: "#9ca3af"
       }
     }
-  </script>
+  }
+}
+</script>
 
-  <style>
-    body {
-      background: #000;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+<style>
+body {
+  background:#000;
+  user-select:none;
+}
+img { pointer-events:none; }
 
-    img {
-      pointer-events: none;
-      user-drag: none;
-    }
+.fade-page {
+  animation: fadeIn .6s ease forwards;
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:none; }
+}
 
-    /* Entry animations */
-    .enter {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: enter 0.6s ease forwards;
-    }
+/* Hover cards */
+.card {
+  transition:.25s ease;
+}
+.card:hover {
+  transform:translateY(-6px) scale(1.03);
+  box-shadow:0 0 14px rgba(139,92,246,.35);
+}
 
-    .delay-1 { animation-delay: .1s }
-    .delay-2 { animation-delay: .2s }
-    .delay-3 { animation-delay: .3s }
+/* Skeleton */
+.skeleton {
+  background:linear-gradient(90deg,#111 25%,#1c1c1c 37%,#111 63%);
+  background-size:400% 100%;
+  animation:skeleton 1.4s infinite;
+}
+@keyframes skeleton {
+  0%{background-position:100%}
+  100%{background-position:-100%}
+}
 
-    @keyframes enter {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+/* Announcement marquee */
+.marquee {
+  overflow:hidden;
+  white-space:nowrap;
+}
+.marquee span {
+  display:inline-block;
+  padding-left:100%;
+  animation:marq 14s linear infinite;
+}
+@keyframes marq {
+  from{transform:translateX(0)}
+  to{transform:translateX(-100%)}
+}
 
-    /* Card hover */
-    .hover-card {
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    .hover-card:hover {
-      transform: translateY(-4px) scale(1.03);
-      box-shadow: 0 0 14px rgba(139,92,246,.4);
-    }
-
-    /* Skeleton */
-    .skeleton {
-      background: linear-gradient(
-        90deg,
-        #111 25%,
-        #1a1a1a 37%,
-        #111 63%
-      );
-      background-size: 400% 100%;
-      animation: skeleton 1.4s ease infinite;
-    }
-
-    @keyframes skeleton {
-      0% { background-position: 100% 0; }
-      100% { background-position: -100% 0; }
-    }
-
-    /* Announcement scroll */
-    .marquee {
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
-    .marquee span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: marquee 12s linear infinite;
-    }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-  </style>
+/* Modal */
+.modal {
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(6px);
+}
+</style>
 </head>
 
 <body oncontextmenu="return false" class="text-white">
 
+<!-- PAGE FADE -->
+<div id="page" class="fade-page">
+
 <!-- HEADER -->
-<header class="max-w-7xl mx-auto px-6 pt-8 enter">
-  <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
-    Nova<span class="text-borderp"> PW</span>
-  </h1>
+<header id="header" class="sticky top-0 bg-black z-40 border-b border-borderp/40">
+  <div class="max-w-7xl mx-auto px-6 py-4">
+    <h1 class="text-4xl font-bold tracking-tight">
+      Nova<span class="text-borderp"> PW</span>
+    </h1>
+  </div>
 </header>
 
 <!-- ANNOUNCEMENT -->
-<section class="max-w-7xl mx-auto px-6 mt-5 enter delay-1">
-  <div
-    id="announcementBox"
-    class="border border-borderp rounded-md px-4 py-2 text-sm text-textdim flex items-center gap-3 min-h-[44px]"
-  >
+<section class="max-w-7xl mx-auto px-6 mt-4">
+  <div id="announcement"
+       class="border border-borderp rounded-md px-4 py-2 flex items-center gap-3 cursor-pointer text-sm text-textdim">
     <i class='bx bx-megaphone text-borderp text-lg'></i>
     <div class="w-full h-4 skeleton rounded"></div>
   </div>
 </section>
 
 <!-- SEARCH -->
-<section class="max-w-7xl mx-auto px-6 mt-6 enter delay-2">
-  <input
-    id="search"
-    type="text"
-    placeholder="Search batch"
+<section class="max-w-7xl mx-auto px-6 mt-6">
+  <input id="search"
     class="w-full md:w-96 bg-black border border-borderp rounded-md px-4 py-2 outline-none"
-  />
+    placeholder="Search batch" />
 </section>
 
-<!-- BATCH GRID -->
+<!-- BATCHES -->
 <main class="max-w-7xl mx-auto px-6 py-8">
-  <div
-    id="batchContainer"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 enter delay-3"
-  >
+  <div id="batches"
+       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-    <!-- Skeleton cards -->
-    <div class="border border-borderp rounded-xl p-4">
-      <div class="aspect-video skeleton rounded mb-4"></div>
-      <div class="h-4 skeleton rounded mb-3"></div>
-      <div class="h-8 skeleton rounded"></div>
-    </div>
-
+    <!-- Skeleton -->
     <div class="border border-borderp rounded-xl p-4">
       <div class="aspect-video skeleton rounded mb-4"></div>
       <div class="h-4 skeleton rounded mb-3"></div>
@@ -153,62 +124,87 @@
   </div>
 </main>
 
+</div>
+
+<!-- ANNOUNCEMENT MODAL -->
+<div id="modal"
+     class="fixed inset-0 hidden items-center justify-center modal z-50">
+  <div class="bg-black border border-borderp rounded-xl p-6 max-w-md w-full mx-4">
+    <h3 class="text-lg font-semibold mb-3">Announcement</h3>
+    <p id="modalText" class="text-textdim text-sm"></p>
+    <button onclick="closeModal()"
+      class="mt-4 border border-borderp px-4 py-1.5 rounded hover:bg-borderp hover:text-black">
+      Close
+    </button>
+  </div>
+</div>
+
 <script>
-  let batches = [];
+let batches=[], announcementText="";
 
-  /* Announcement */
-  fetch('./data/announcement.json')
-    .then(r => r.json())
-    .then(a => {
-      document.getElementById('announcementBox').innerHTML = `
-        <i class='bx bx-megaphone text-borderp text-lg'></i>
-        <div class="marquee">
-          <span>${a.text}</span>
-        </div>
-      `;
-    });
+/* Announcement */
+fetch('./data/announcement.json')
+.then(r=>r.json())
+.then(a=>{
+  announcementText=a.text;
+  document.getElementById('announcement').innerHTML=`
+    <i class='bx bx-megaphone text-borderp text-lg'></i>
+    <div class="marquee"><span>${a.text}</span></div>`;
+});
 
-  /* Batches */
-  fetch('./data/batches.json')
-    .then(r => r.json())
-    .then(data => {
-      batches = data;
-      render(batches);
-    });
+/* Modal */
+document.getElementById('announcement').onclick=()=>{
+  document.getElementById('modalText').innerText=announcementText;
+  document.getElementById('modal').classList.remove('hidden');
+  document.getElementById('modal').classList.add('flex');
+}
+function closeModal(){
+  document.getElementById('modal').classList.add('hidden');
+}
 
-  function render(list) {
-    const c = document.getElementById('batchContainer');
-    c.innerHTML = '';
+/* Batches */
+fetch('./data/batches.json')
+.then(r=>r.json())
+.then(d=>{
+  batches=d;
+  render(d);
+});
 
-    list.forEach(b => {
-      c.innerHTML += `
-        <div class="border border-borderp rounded-xl p-4 bg-black hover-card cursor-pointer">
-          <div class="aspect-video rounded-lg overflow-hidden mb-4">
-            <img src="${b.thumbnail}" class="w-full h-full object-cover">
-          </div>
-
-          <h3 class="text-sm font-semibold mb-3">${b.name}</h3>
-
-          <button
-            onclick="location.href='${b.link}'"
-            class="w-full border border-borderp rounded-md py-1.5 text-sm
-                   hover:bg-borderp hover:text-black transition active:scale-95">
-            Study
-          </button>
-        </div>
-      `;
-    });
-  }
-
-  document.getElementById('search').addEventListener('input', e => {
-    const v = e.target.value.toLowerCase();
-    render(batches.filter(b => b.name.toLowerCase().includes(v)));
+function render(list){
+  const c=document.getElementById('batches');
+  c.innerHTML='';
+  list.forEach(b=>{
+    c.innerHTML+=`
+    <div class="card border border-borderp rounded-xl p-4">
+      <div class="aspect-video rounded overflow-hidden mb-4">
+        <img src="${b.thumbnail}" class="w-full h-full object-cover">
+      </div>
+      <h3 class="text-sm font-semibold mb-3">${b.name}</h3>
+      <button onclick="go('${b.link}')"
+        class="w-full border border-borderp rounded-md py-1.5 text-sm
+               hover:bg-borderp hover:text-black transition active:scale-95">
+        Study
+      </button>
+    </div>`;
   });
+}
 
-  /* Protection */
-  document.addEventListener('keydown', e => {
-    if (e.ctrlKey || e.key === 'F12') e.preventDefault();
-  });
+/* Search */
+search.oninput=e=>{
+  const v=e.target.value.toLowerCase();
+  render(batches.filter(b=>b.name.toLowerCase().includes(v)));
+}
+
+/* Page transition */
+function go(url){
+  document.getElementById('page').style.opacity=.3;
+  setTimeout(()=>location.href=url,200);
+}
+
+/* Protection */
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.key==="F12")e.preventDefault();
+});
 </script>
 
 </body>
