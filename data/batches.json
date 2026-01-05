@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Class 10 Science",
+    "thumbnail": "https://via.placeholder.com/400x250",
+    "link": "batch.html?id=class10science"
+  },
+  {
+    "name": "Class 11 Physics",
+    "thumbnail": "https://via.placeholder.com/400x250",
+    "link": "batch.html?id=class11physics"
+  },
+  {
+    "name": "JEE Advanced",
+    "thumbnail": "https://via.placeholder.com/400x250",
+    "link": "batch.html?id=jeeadv"
+  }
+]
