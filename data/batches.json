@@ -1,17 +1,17 @@
 [
   {
     "name": "Class 10 Science",
-    "thumbnail": "https://via.placeholder.com/400x250",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO07yRzT6RwxAK0xy-aC-0cv059gwp8TPgwM0FgR-yrA&s=10",
     "link": "batch.html?id=class10science"
   },
   {
     "name": "Class 11 Physics",
-    "thumbnail": "https://via.placeholder.com/400x250",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO07yRzT6RwxAK0xy-aC-0cv059gwp8TPgwM0FgR-yrA&s=10",
     "link": "batch.html?id=class11physics"
   },
   {
     "name": "JEE Advanced",
-    "thumbnail": "https://via.placeholder.com/400x250",
+    "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO07yRzT6RwxAK0xy-aC-0cv059gwp8TPgwM0FgR-yrA&s=10",
     "link": "batch.html?id=jeeadv"
   }
 ]
