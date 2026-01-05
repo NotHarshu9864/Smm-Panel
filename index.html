@@ -1,191 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harsh SMM • Login</title>
+  <meta charset="UTF-8">
+  <title>Nova PW</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Tailwind -->
-<script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Firebase v8 -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#a855f7'
+          },
+          boxShadow: {
+            neon: '0 0 20px #a855f7'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top, #1a002a, #000);
+      user-select: none;
+    }
+
+    /* Glow animation */
+    .glow {
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #a855f7; }
+      to { box-shadow: 0 0 25px #a855f7; }
+    }
+
+    /* Card hover lighting */
+    .card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 30px #a855f7;
+    }
+
+    /* Disable drag */
+    img {
+      pointer-events: none;
+    }
+  </style>
 </head>
 
-<body class="min-h-screen bg-slate-100 flex items-center justify-center">
+<body oncontextmenu="return false" class="text-white min-h-screen">
 
-<div class="w-full max-w-md px-4">
-  <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+  <!-- HEADER -->
+  <header class="text-center py-10">
+    <h1 class="text-5xl md:text-6xl font-extrabold text-purple-400 glow tracking-widest">
+      Nova PW
+    </h1>
+    <p class="text-gray-400 mt-3">Batch Streaming Platform</p>
+  </header>
 
-    <!-- HEADER -->
-    <div class="flex items-center gap-2">
-      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z"/>
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2"/>
-      </svg>
-      <h1 class="text-xl font-semibold">Harsh SMM</h1>
-    </div>
-    <p class="text-sm text-slate-500 mt-1" id="formTitle">Login to your dashboard</p>
-
-    <!-- LOGIN FORM -->
-    <form id="loginForm" class="mt-6 space-y-4">
-      <div>
-        <label class="text-sm font-medium">Email</label>
-        <input id="loginEmail" type="email" required
-          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
-                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
-      </div>
-
-      <div>
-        <label class="text-sm font-medium">Password</label>
-        <input id="loginPassword" type="password" required
-          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
-                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
-      </div>
-
-      <button class="w-full h-10 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-        Login
-      </button>
-    </form>
-
-    <!-- REGISTER FORM -->
-    <form id="registerForm" class="mt-6 space-y-4 hidden">
-      <div>
-        <label class="text-sm font-medium">Full Name</label>
-        <input id="regName" required
-          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
-                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
-      </div>
-
-      <div>
-        <label class="text-sm font-medium">Email</label>
-        <input id="regEmail" type="email" required
-          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
-                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
-      </div>
-
-      <div>
-        <label class="text-sm font-medium">Password</label>
-        <input id="regPass" type="password" required
-          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
-                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
-      </div>
-
-      <div>
-        <label class="text-sm font-medium">Confirm Password</label>
-        <input id="regConfirm" type="password" required
-          class="mt-1 w-full rounded-lg border px-3 py-2 text-sm
-                 focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500">
-      </div>
-
-      <button class="w-full h-10 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
-        Create Account
-      </button>
-    </form>
-
-    <!-- MESSAGE -->
-    <p id="authMsg" class="mt-4 text-sm text-red-600"></p>
-
-    <!-- TOGGLE -->
-    <div class="mt-6 text-center text-sm text-slate-600">
-      <span id="toggleText">Don’t have an account?</span>
-      <button id="toggleBtn" class="text-blue-600 font-medium ml-1">Register</button>
-    </div>
+  <!-- SEARCH BAR -->
+  <div class="flex justify-center px-4">
+    <input
+      id="search"
+      type="text"
+      placeholder="Search Batch..."
+      class="w-full max-w-xl bg-black border-2 border-purple-500 rounded-xl px-5 py-3 text-white outline-none focus:shadow-neon transition glow"
+    >
   </div>
 
-  <p class="text-center text-xs text-slate-400 mt-4">© Harsh SMM</p>
-</div>
+  <!-- BATCH GRID -->
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <div id="batchContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+  </main>
 
-<script>
-/* 🔥 FIREBASE CONFIG (YOURS) */
-const firebaseConfig = {
-  apiKey: "AIzaSyBvsZp41z8CvSWmiZoCvtWUU2rYmUoG7Uc",
-  authDomain: "harshsmm.firebaseapp.com",
-  projectId: "harshsmm",
-  storageBucket: "harshsmm.firebasestorage.app",
-  messagingSenderId: "776315099973",
-  appId: "1:776315099973:web:760da4aad2eb99a716fc2c"
-};
+  <!-- JS -->
+  <script>
+    let batches = [];
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-/* AUTO LOGIN */
-auth.onAuthStateChanged(user => {
-  if (user) {
-    localStorage.setItem("userEmail", user.email);
-    location.href = "new-order.html";
-  }
-});
-
-/* TOGGLE */
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-const toggleBtn = document.getElementById("toggleBtn");
-const toggleText = document.getElementById("toggleText");
-const formTitle = document.getElementById("formTitle");
-const authMsg = document.getElementById("authMsg");
-
-toggleBtn.onclick = () => {
-  authMsg.textContent = "";
-  loginForm.classList.toggle("hidden");
-  registerForm.classList.toggle("hidden");
-
-  const isLogin = !loginForm.classList.contains("hidden");
-  formTitle.textContent = isLogin ? "Login to your dashboard" : "Create a new account";
-  toggleText.textContent = isLogin ? "Don’t have an account?" : "Already have an account?";
-  toggleBtn.textContent = isLogin ? "Register" : "Login";
-};
-
-/* LOGIN */
-loginForm.onsubmit = e => {
-  e.preventDefault();
-  authMsg.textContent = "Checking credentials...";
-
-  auth.signInWithEmailAndPassword(
-    loginEmail.value,
-    loginPassword.value
-  )
-  .then(() => location.href = "new-order.html")
-  .catch(err => {
-    if (err.code === "auth/user-not-found")
-      authMsg.textContent = "User does not exist";
-    else if (err.code === "auth/wrong-password")
-      authMsg.textContent = "Invalid password";
-    else
-      authMsg.textContent = err.message;
-  });
-};
-
-/* REGISTER */
-registerForm.onsubmit = e => {
-  e.preventDefault();
-  authMsg.textContent = "";
-
-  if (regPass.value !== regConfirm.value) {
-    authMsg.textContent = "Passwords do not match";
-    return;
-  }
-
-  auth.createUserWithEmailAndPassword(regEmail.value, regPass.value)
-    .then(cred => {
-      return db.collection("users").doc(cred.user.uid).set({
-        name: regName.value,
-        email: regEmail.value,
-        balance: 0,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    fetch('./data/batches.json')
+      .then(res => res.json())
+      .then(data => {
+        batches = data;
+        renderBatches(batches);
       });
-    })
-    .then(() => location.href = "new-order.html")
-    .catch(err => authMsg.textContent = err.message);
-};
-</script>
+
+    function renderBatches(data) {
+      const container = document.getElementById('batchContainer');
+      container.innerHTML = '';
+
+      data.forEach(batch => {
+        container.innerHTML += `
+          <div class="card bg-black border border-purple-500 rounded-2xl p-4 transition-all duration-300 cursor-pointer">
+            <img src="${batch.thumbnail}" class="rounded-xl mb-4 w-full h-40 object-cover">
+
+            <h2 class="text-lg font-bold mb-3">${batch.name}</h2>
+
+            <button onclick="location.href='${batch.link}'"
+              class="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-700 transition glow">
+              Study
+            </button>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById('search').addEventListener('input', e => {
+      const value = e.target.value.toLowerCase();
+      const filtered = batches.filter(b =>
+        b.name.toLowerCase().includes(value)
+      );
+      renderBatches(filtered);
+    });
+
+    /* Extra Protection */
+    document.addEventListener('keydown', e => {
+      if (
+        e.ctrlKey && ['u','s','c','x','a'].includes(e.key.toLowerCase()) ||
+        e.key === 'F12'
+      ) {
+        e.preventDefault();
+      }
+    });
+  </script>
 
 </body>
 </html>
