@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Nova PW</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind CDN -->
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind Config -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            neon: '#a855f7'
-          },
-          boxShadow: {
-            neon: '0 0 20px #a855f7'
+            bg: "#000000",
+            borderp: "#8b5cf6",
+            textdim: "#bdbdbd"
           }
         }
       }
@@ -26,82 +24,89 @@
 
   <style>
     body {
-      background: radial-gradient(circle at top, #1a002a, #000);
+      background-color: #000;
       user-select: none;
+      -webkit-user-select: none;
     }
 
-    /* Glow animation */
-    .glow {
-      animation: glow 2s infinite alternate;
+    /* Purple border glow only */
+    .border-glow {
+      box-shadow: 0 0 0 rgba(139,92,246,0);
+      transition: all 0.35s ease;
     }
 
-    @keyframes glow {
-      from { box-shadow: 0 0 10px #a855f7; }
-      to { box-shadow: 0 0 25px #a855f7; }
+    .border-glow:hover {
+      box-shadow: 0 0 18px rgba(139,92,246,0.45);
+      transform: scale(1.05);
     }
 
-    /* Card hover lighting */
-    .card:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 30px #a855f7;
-    }
-
-    /* Disable drag */
+    /* Disable image drag */
     img {
       pointer-events: none;
+      user-drag: none;
     }
   </style>
 </head>
 
-<body oncontextmenu="return false" class="text-white min-h-screen">
+<body oncontextmenu="return false" class="text-white">
 
   <!-- HEADER -->
-  <header class="text-center py-10">
-    <h1 class="text-5xl md:text-6xl font-extrabold text-purple-400 glow tracking-widest">
-      Nova PW
+  <header class="max-w-7xl mx-auto px-6 pt-10 pb-6">
+    <h1 class="text-4xl md:text-5xl font-extrabold tracking-wide">
+      Nova<span class="text-borderp"> PW</span>
     </h1>
-    <p class="text-gray-400 mt-3">Batch Streaming Platform</p>
+    <p class="text-textdim mt-1 text-sm md:text-base">
+      Premium Batch Streaming Platform
+    </p>
   </header>
 
-  <!-- SEARCH BAR -->
-  <div class="flex justify-center px-4">
+  <!-- SEARCH -->
+  <div class="max-w-7xl mx-auto px-6 mt-6">
     <input
       id="search"
       type="text"
-      placeholder="Search Batch..."
-      class="w-full max-w-xl bg-black border-2 border-purple-500 rounded-xl px-5 py-3 text-white outline-none focus:shadow-neon transition glow"
-    >
+      placeholder="Search batch"
+      class="w-full md:w-96 bg-black border border-borderp rounded-lg px-4 py-2 outline-none focus:ring-0 border-glow"
+    />
   </div>
 
   <!-- BATCH GRID -->
-  <main class="max-w-7xl mx-auto px-6 py-12">
-    <div id="batchContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+  <main class="max-w-7xl mx-auto px-6 py-10">
+    <div
+      id="batchContainer"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    ></div>
   </main>
 
-  <!-- JS -->
+  <!-- SCRIPT -->
   <script>
     let batches = [];
 
-    fetch('./data/batches.json')
+    fetch("./data/batches.json")
       .then(res => res.json())
       .then(data => {
         batches = data;
-        renderBatches(batches);
+        render(batches);
       });
 
-    function renderBatches(data) {
-      const container = document.getElementById('batchContainer');
-      container.innerHTML = '';
+    function render(list) {
+      const c = document.getElementById("batchContainer");
+      c.innerHTML = "";
 
-      data.forEach(batch => {
-        container.innerHTML += `
-          <div class="card bg-black border border-purple-500 rounded-2xl p-4 transition-all duration-300 cursor-pointer">
-            <img src="${batch.thumbnail}" class="rounded-xl mb-4 w-full h-40 object-cover">
+      list.forEach(b => {
+        c.innerHTML += `
+          <div class="border border-borderp rounded-xl p-4 bg-black border-glow cursor-pointer">
+            <div class="aspect-video rounded-lg overflow-hidden mb-4">
+              <img src="${b.thumbnail}" class="w-full h-full object-cover" />
+            </div>
 
-            <h2 class="text-lg font-bold mb-3">${batch.name}</h2>
+            <h3 class="font-semibold text-base mb-3">
+              ${b.name}
+            </h3>
 
-            <button onclick="location.href='${batch.link}'"
-              class="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-700 transition glow">
+            <button
+              onclick="location.href='${b.link}'"
+              class="w-full border border-borderp rounded-md py-1.5 text-sm hover:bg-borderp hover:text-black transition">
               Study
             </button>
           </div>
@@ -109,19 +114,17 @@
       });
     }
 
-    document.getElementById('search').addEventListener('input', e => {
-      const value = e.target.value.toLowerCase();
-      const filtered = batches.filter(b =>
-        b.name.toLowerCase().includes(value)
-      );
-      renderBatches(filtered);
+    document.getElementById("search").addEventListener("input", e => {
+      const v = e.target.value.toLowerCase();
+      render(batches.filter(b => b.name.toLowerCase().includes(v)));
     });
 
-    /* Extra Protection */
-    document.addEventListener('keydown', e => {
+    /* HARD PROTECTION */
+    document.addEventListener("keydown", e => {
       if (
-        e.ctrlKey && ['u','s','c','x','a'].includes(e.key.toLowerCase()) ||
-        e.key === 'F12'
+        e.ctrlKey ||
+        e.key === "F12" ||
+        e.key === "ContextMenu"
       ) {
         e.preventDefault();
       }
