@@ -13,9 +13,8 @@
       theme: {
         extend: {
           colors: {
-            bg: "#000000",
             borderp: "#8b5cf6",
-            textdim: "#bdbdbd"
+            textdim: "#9ca3af"
           }
         }
       }
@@ -24,112 +23,145 @@
 
   <style>
     body {
-      background-color: #000;
-      user-select: none;
-      -webkit-user-select: none;
+      background:#000;
+      user-select:none;
+      -webkit-user-select:none;
     }
 
-    /* Purple border glow only */
-    .border-glow {
-      box-shadow: 0 0 0 rgba(139,92,246,0);
-      transition: all 0.35s ease;
-    }
-
-    .border-glow:hover {
-      box-shadow: 0 0 18px rgba(139,92,246,0.45);
-      transform: scale(1.05);
-    }
-
-    /* Disable image drag */
     img {
-      pointer-events: none;
-      user-drag: none;
+      pointer-events:none;
+      user-drag:none;
+    }
+
+    .hover-card {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .hover-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 16px rgba(139,92,246,.45);
+    }
+
+    /* Skeleton */
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        #111 25%,
+        #1a1a1a 37%,
+        #111 63%
+      );
+      background-size: 400% 100%;
+      animation: skeleton 1.4s ease infinite;
+    }
+
+    @keyframes skeleton {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
     }
   </style>
 </head>
 
 <body oncontextmenu="return false" class="text-white">
 
-  <!-- HEADER -->
-  <header class="max-w-7xl mx-auto px-6 pt-10 pb-6">
-    <h1 class="text-4xl md:text-5xl font-extrabold tracking-wide">
-      Nova<span class="text-borderp"> PW</span>
-    </h1>
-    <p class="text-textdim mt-1 text-sm md:text-base">
-      Premium Batch Streaming Platform
-    </p>
-  </header>
+<!-- HEADER (PW STYLE) -->
+<header class="max-w-7xl mx-auto px-6 pt-8">
+  <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+    Nova<span class="text-borderp"> PW</span>
+  </h1>
+</header>
 
-  <!-- SEARCH -->
-  <div class="max-w-7xl mx-auto px-6 mt-6">
-    <input
-      id="search"
-      type="text"
-      placeholder="Search batch"
-      class="w-full md:w-96 bg-black border border-borderp rounded-lg px-4 py-2 outline-none focus:ring-0 border-glow"
-    />
+<!-- ANNOUNCEMENT -->
+<section class="max-w-7xl mx-auto px-6 mt-5">
+  <div id="announcementBox"
+       class="border border-borderp rounded-md px-4 py-2 text-sm text-textdim min-h-[44px] flex items-center">
+    <div class="w-full h-4 skeleton rounded"></div>
   </div>
+</section>
 
-  <!-- BATCH GRID -->
-  <main class="max-w-7xl mx-auto px-6 py-10">
-    <div
-      id="batchContainer"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-    ></div>
-  </main>
+<!-- SEARCH -->
+<section class="max-w-7xl mx-auto px-6 mt-6">
+  <input
+    id="search"
+    type="text"
+    placeholder="Search batch"
+    class="w-full md:w-96 bg-black border border-borderp rounded-md px-4 py-2 outline-none"
+  />
+</section>
 
-  <!-- SCRIPT -->
-  <script>
-    let batches = [];
+<!-- BATCH GRID -->
+<main class="max-w-7xl mx-auto px-6 py-8">
+  <div id="batchContainer"
+       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-    fetch("./data/batches.json")
-      .then(res => res.json())
-      .then(data => {
-        batches = data;
-        render(batches);
-      });
+    <!-- Skeleton cards -->
+    <div class="border border-borderp rounded-xl p-4">
+      <div class="aspect-video skeleton rounded mb-4"></div>
+      <div class="h-4 skeleton rounded mb-3"></div>
+      <div class="h-8 skeleton rounded"></div>
+    </div>
 
-    function render(list) {
-      const c = document.getElementById("batchContainer");
-      c.innerHTML = "";
+    <div class="border border-borderp rounded-xl p-4">
+      <div class="aspect-video skeleton rounded mb-4"></div>
+      <div class="h-4 skeleton rounded mb-3"></div>
+      <div class="h-8 skeleton rounded"></div>
+    </div>
 
-      list.forEach(b => {
-        c.innerHTML += `
-          <div class="border border-borderp rounded-xl p-4 bg-black border-glow cursor-pointer">
-            <div class="aspect-video rounded-lg overflow-hidden mb-4">
-              <img src="${b.thumbnail}" class="w-full h-full object-cover" />
-            </div>
+  </div>
+</main>
 
-            <h3 class="font-semibold text-base mb-3">
-              ${b.name}
-            </h3>
+<script>
+  let batches = [];
 
-            <button
-              onclick="location.href='${b.link}'"
-              class="w-full border border-borderp rounded-md py-1.5 text-sm hover:bg-borderp hover:text-black transition">
-              Study
-            </button>
+  /* ANNOUNCEMENT LOAD */
+  fetch('./data/announcement.json')
+    .then(r => r.json())
+    .then(a => {
+      document.getElementById('announcementBox').innerHTML =
+        `<span class="font-medium text-white">Announcement:</span>
+         <span class="ml-2">${a.text}</span>`;
+    });
+
+  /* BATCH LOAD */
+  fetch('./data/batches.json')
+    .then(r => r.json())
+    .then(data => {
+      batches = data;
+      render(batches);
+    });
+
+  function render(list) {
+    const c = document.getElementById('batchContainer');
+    c.innerHTML = '';
+
+    list.forEach(b => {
+      c.innerHTML += `
+        <div class="border border-borderp rounded-xl p-4 bg-black hover-card cursor-pointer">
+          <div class="aspect-video rounded-lg overflow-hidden mb-4">
+            <img src="${b.thumbnail}" class="w-full h-full object-cover">
           </div>
-        `;
-      });
-    }
 
-    document.getElementById("search").addEventListener("input", e => {
-      const v = e.target.value.toLowerCase();
-      render(batches.filter(b => b.name.toLowerCase().includes(v)));
-    });
+          <h3 class="text-sm font-semibold mb-3">${b.name}</h3>
 
-    /* HARD PROTECTION */
-    document.addEventListener("keydown", e => {
-      if (
-        e.ctrlKey ||
-        e.key === "F12" ||
-        e.key === "ContextMenu"
-      ) {
-        e.preventDefault();
-      }
+          <button
+            onclick="location.href='${b.link}'"
+            class="w-full border border-borderp rounded-md py-1.5 text-sm hover:bg-borderp hover:text-black transition">
+            Study
+          </button>
+        </div>
+      `;
     });
-  </script>
+  }
+
+  document.getElementById('search').addEventListener('input', e => {
+    const v = e.target.value.toLowerCase();
+    render(batches.filter(b => b.name.toLowerCase().includes(v)));
+  });
+
+  /* HARD PROTECTION */
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.key === 'F12') e.preventDefault();
+  });
+</script>
 
 </body>
 </html>
