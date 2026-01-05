@@ -8,6 +8,9 @@
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
   <script>
     tailwind.config = {
       theme: {
@@ -23,23 +26,42 @@
 
   <style>
     body {
-      background:#000;
-      user-select:none;
-      -webkit-user-select:none;
+      background: #000;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     img {
-      pointer-events:none;
-      user-drag:none;
+      pointer-events: none;
+      user-drag: none;
     }
 
+    /* Entry animations */
+    .enter {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: enter 0.6s ease forwards;
+    }
+
+    .delay-1 { animation-delay: .1s }
+    .delay-2 { animation-delay: .2s }
+    .delay-3 { animation-delay: .3s }
+
+    @keyframes enter {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Card hover */
     .hover-card {
       transition: transform .25s ease, box-shadow .25s ease;
     }
 
     .hover-card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 16px rgba(139,92,246,.45);
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 0 14px rgba(139,92,246,.4);
     }
 
     /* Skeleton */
@@ -58,28 +80,48 @@
       0% { background-position: 100% 0; }
       100% { background-position: -100% 0; }
     }
+
+    /* Announcement scroll */
+    .marquee {
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .marquee span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 12s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
   </style>
 </head>
 
 <body oncontextmenu="return false" class="text-white">
 
-<!-- HEADER (PW STYLE) -->
-<header class="max-w-7xl mx-auto px-6 pt-8">
+<!-- HEADER -->
+<header class="max-w-7xl mx-auto px-6 pt-8 enter">
   <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
     Nova<span class="text-borderp"> PW</span>
   </h1>
 </header>
 
 <!-- ANNOUNCEMENT -->
-<section class="max-w-7xl mx-auto px-6 mt-5">
-  <div id="announcementBox"
-       class="border border-borderp rounded-md px-4 py-2 text-sm text-textdim min-h-[44px] flex items-center">
+<section class="max-w-7xl mx-auto px-6 mt-5 enter delay-1">
+  <div
+    id="announcementBox"
+    class="border border-borderp rounded-md px-4 py-2 text-sm text-textdim flex items-center gap-3 min-h-[44px]"
+  >
+    <i class='bx bx-megaphone text-borderp text-lg'></i>
     <div class="w-full h-4 skeleton rounded"></div>
   </div>
 </section>
 
 <!-- SEARCH -->
-<section class="max-w-7xl mx-auto px-6 mt-6">
+<section class="max-w-7xl mx-auto px-6 mt-6 enter delay-2">
   <input
     id="search"
     type="text"
@@ -90,8 +132,10 @@
 
 <!-- BATCH GRID -->
 <main class="max-w-7xl mx-auto px-6 py-8">
-  <div id="batchContainer"
-       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  <div
+    id="batchContainer"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 enter delay-3"
+  >
 
     <!-- Skeleton cards -->
     <div class="border border-borderp rounded-xl p-4">
@@ -112,16 +156,19 @@
 <script>
   let batches = [];
 
-  /* ANNOUNCEMENT LOAD */
+  /* Announcement */
   fetch('./data/announcement.json')
     .then(r => r.json())
     .then(a => {
-      document.getElementById('announcementBox').innerHTML =
-        `<span class="font-medium text-white">Announcement:</span>
-         <span class="ml-2">${a.text}</span>`;
+      document.getElementById('announcementBox').innerHTML = `
+        <i class='bx bx-megaphone text-borderp text-lg'></i>
+        <div class="marquee">
+          <span>${a.text}</span>
+        </div>
+      `;
     });
 
-  /* BATCH LOAD */
+  /* Batches */
   fetch('./data/batches.json')
     .then(r => r.json())
     .then(data => {
@@ -144,7 +191,8 @@
 
           <button
             onclick="location.href='${b.link}'"
-            class="w-full border border-borderp rounded-md py-1.5 text-sm hover:bg-borderp hover:text-black transition">
+            class="w-full border border-borderp rounded-md py-1.5 text-sm
+                   hover:bg-borderp hover:text-black transition active:scale-95">
             Study
           </button>
         </div>
@@ -157,7 +205,7 @@
     render(batches.filter(b => b.name.toLowerCase().includes(v)));
   });
 
-  /* HARD PROTECTION */
+  /* Protection */
   document.addEventListener('keydown', e => {
     if (e.ctrlKey || e.key === 'F12') e.preventDefault();
   });
