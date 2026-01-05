@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Subject JSON Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+  theme:{
+    extend:{
+      colors:{
+        accent:"#8b5cf6"
+      }
+    }
+  }
+}
+</script>
+
+<style>
+body{background:#000}
+textarea{font-family:monospace}
+</style>
+</head>
+
+<body class="text-white min-h-screen flex items-center justify-center px-4">
+
+<div class="w-full max-w-3xl border border-accent/40 rounded-xl p-6">
+  <h1 class="text-2xl font-semibold mb-2">Subject JSON Generator</h1>
+  <p class="text-gray-400 mb-4 text-sm">
+    Upload subject file → auto-generate JSON
+  </p>
+
+  <!-- FILE INPUT -->
+  <input type="file" id="file"
+    accept=".txt"
+    class="w-full mb-4 p-2 border border-accent/40 rounded bg-black">
+
+  <!-- OUTPUT -->
+  <textarea id="output"
+    class="w-full h-80 p-4 bg-black border border-accent/40 rounded text-sm"
+    placeholder="Generated JSON will appear here..."></textarea>
+
+  <!-- ACTIONS -->
+  <div class="flex justify-between mt-4">
+    <button onclick="generate()"
+      class="px-5 py-2 border border-accent rounded hover:bg-accent hover:text-black transition">
+      Generate JSON
+    </button>
+
+    <button onclick="copyJSON()"
+      class="px-5 py-2 border border-gray-600 rounded hover:bg-gray-700 transition">
+      Copy
+    </button>
+  </div>
+</div>
+
+<script>
+function generate(){
+  const file = document.getElementById("file").files[0];
+  if(!file) return alert("Upload a file first");
+
+  const subject = file.name.replace(/\.[^/.]+$/, "").toLowerCase();
+
+  const reader = new FileReader();
+  reader.onload = () => parse(reader.result, subject);
+  reader.readAsText(file);
+}
+
+function parse(text, subject){
+  const lines = text.split(/\r?\n/);
+  let chapters=[], current=null;
+
+  lines.forEach(line=>{
+    line=line.trim();
+    if(!line) return;
+
+    if(!line.includes("-")){
+      if(current) chapters.push(current);
+      current={name:line, items:[]};
+    }else{
+      const idx=line.lastIndexOf("-");
+      const title=line.slice(0,idx).trim();
+      const link=line.slice(idx+1).trim();
+
+      if(current && title && link){
+        current.items.push({title, link});
+      }
+    }
+  });
+
+  if(current) chapters.push(current);
+
+  if(!chapters.length){
+    document.getElementById("output").value="INVALID FORMAT";
+    return;
+  }
+
+  const json={
+    subject,
+    chapters
+  };
+
+  document.getElementById("output").value=
+    JSON.stringify(json,null,2);
+}
+
+function copyJSON(){
+  const out=document.getElementById("output");
+  out.select();
+  document.execCommand("copy");
+  alert("Copied!");
+}
+</script>
+
+</body>
+</html>
