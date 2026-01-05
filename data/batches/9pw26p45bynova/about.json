@@ -1,5 +1,6 @@
 {
   "name": "Class 10 Science",
   "thumbnail": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO07yRzT6RwxAK0xy-aC-0cv059gwp8TPgwM0FgR-yrA&s=10",
-  "description": "Complete Class 10 Science batch with recorded lectures, notes and DPP."
+  "description": "Complete Class 10 Science batch with recorded lectures, notes and daily practice problems.",
+  "subjects": ["physics", "chemistry"]
 }
