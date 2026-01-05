@@ -1,0 +1,27 @@
+{
+  "subject": "Physics",
+  "chapters": [
+    {
+      "name": "Motion",
+      "lectures": [
+        {
+          "title": "Introduction to Motion",
+          "play": "player.html?vid=motion1"
+        },
+        {
+          "title": "Equations of Motion",
+          "play": "player.html?vid=motion2"
+        }
+      ]
+    },
+    {
+      "name": "Force and Laws",
+      "lectures": [
+        {
+          "title": "Newton Laws",
+          "play": "player.html?vid=force1"
+        }
+      ]
+    }
+  ]
+}
