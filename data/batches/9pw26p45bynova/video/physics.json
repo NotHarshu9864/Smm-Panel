@@ -3,23 +3,23 @@
   "chapters": [
     {
       "name": "Motion",
-      "lectures": [
+      "items": [
         {
           "title": "Introduction to Motion",
-          "play": "player.html?vid=motion1"
+          "link": "lecture.html?id=motion1"
         },
         {
           "title": "Equations of Motion",
-          "play": "player.html?vid=motion2"
+          "link": "lecture.html?id=motion2"
         }
       ]
     },
     {
       "name": "Force and Laws",
-      "lectures": [
+      "items": [
         {
-          "title": "Newton Laws",
-          "play": "player.html?vid=force1"
+          "title": "Newton's Laws",
+          "link": "lecture.html?id=force1"
         }
       ]
     }
