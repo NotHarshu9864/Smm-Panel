@@ -23,7 +23,9 @@ tailwind.config = {
 <style>
 body{background:#000;user-select:none}
 .card{transition:.25s}
-.card:hover{transform:scale(1.03);box-shadow:0 0 12px rgba(139,92,246,.35)}
+.card:hover{transform:translateY(-4px);box-shadow:0 0 12px rgba(139,92,246,.35)}
+.tab{padding-bottom:.5rem}
+.tab.active{border-bottom:2px solid #8b5cf6}
 </style>
 </head>
 
@@ -32,17 +34,17 @@ body{background:#000;user-select:none}
 <div class="max-w-6xl mx-auto px-5 py-6">
 
 <!-- TITLE -->
-<h1 id="batchTitle" class="text-3xl font-bold mb-4"></h1>
+<h1 id="batchName" class="text-3xl font-bold mb-4"></h1>
 
 <!-- THUMB -->
-<img id="batchThumb" class="rounded-xl mb-6 border border-borderp">
+<img id="batchThumb" class="rounded-xl mb-6 border border-borderp hidden">
 
 <!-- TABS -->
 <div class="flex gap-6 border-b border-borderp/40 mb-6">
-  <button onclick="openTab('about')" class="tab active">About</button>
-  <button onclick="openTab('video')" class="tab">Video</button>
-  <button onclick="openTab('notes')" class="tab">Notes</button>
-  <button onclick="openTab('dpp')" class="tab">DPP</button>
+  <button class="tab active" onclick="openTab('about',this)">About</button>
+  <button class="tab" onclick="openTab('video',this)">Video</button>
+  <button class="tab" onclick="openTab('notes',this)">Notes</button>
+  <button class="tab" onclick="openTab('dpp',this)">DPP</button>
 </div>
 
 <!-- CONTENT -->
@@ -51,56 +53,78 @@ body{background:#000;user-select:none}
 </div>
 
 <script>
-const params=new URLSearchParams(location.search);
-const batch=params.get('id'); // class10science
-let currentType="video";
+const batch = new URLSearchParams(location.search).get("id");
+let batchData = {};
+let subjects = [];
+let currentType = "about";
 
+/* LOAD ABOUT */
 fetch(`/data/batches/${batch}/about.json`)
 .then(r=>r.json())
 .then(d=>{
-  batchTitle.innerText=d.name;
-  batchThumb.src=d.thumbnail;
-  showAbout(d.description);
+  batchData = d;
+  subjects = d.subjects;
+
+  batchName.innerText = d.name;
+  batchThumb.src = d.thumbnail;
+  batchThumb.classList.remove("hidden");
+
+  showAbout();
 });
 
-function openTab(type){
-  currentType=type;
-  if(type==="about") return;
-  loadSubjects(type);
+/* TAB HANDLER */
+function openTab(type,btn){
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  btn.classList.add("active");
+  currentType = type;
+
+  if(type==="about") showAbout();
+  else showSubjects(type);
 }
 
-function showAbout(text){
-  content.innerHTML=`<p class="text-textdim">${text}</p>`;
+/* ABOUT */
+function showAbout(){
+  content.innerHTML = `
+    <p class="text-textdim max-w-3xl leading-relaxed">
+      ${batchData.description}
+    </p>`;
 }
 
-function loadSubjects(type){
-  content.innerHTML=`<p class="text-textdim">Select a subject</p>
-  <div id="subjects" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4"></div>`;
-
-  ["physics","chemistry"].forEach(sub=>{
-    document.getElementById("subjects").innerHTML+=`
-      <div onclick="openSubject('${type}','${sub}')"
-           class="card border border-borderp rounded-xl p-4 cursor-pointer">
-        ${sub.toUpperCase()}
-      </div>`;
-  });
+/* SUBJECTS */
+function showSubjects(type){
+  content.innerHTML = `
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+      ${subjects.map(s=>`
+        <div onclick="openSubject('${type}','${s}')"
+             class="card border border-borderp rounded-xl p-4 cursor-pointer text-center">
+          ${s.toUpperCase()}
+        </div>`).join("")}
+    </div>`;
 }
 
+/* SUBJECT → CHAPTER → ITEMS */
 function openSubject(type,subject){
   fetch(`/data/batches/${batch}/${type}/${subject}.json`)
   .then(r=>r.json())
   .then(d=>{
-    content.innerHTML=`<h2 class="text-xl font-semibold mb-4">${d.subject}</h2>`;
+    content.innerHTML = `<h2 class="text-xl font-semibold mb-4">${d.subject}</h2>`;
+
     d.chapters.forEach(ch=>{
-      content.innerHTML+=`
+      content.innerHTML += `
         <div class="border border-borderp/40 rounded-lg p-3 mb-3">
-          <div onclick="this.nextElementSibling.classList.toggle('hidden')"
-               class="font-medium cursor-pointer">${ch.name}</div>
-          <div class="hidden mt-2 space-y-2">
-            ${ch.lectures.map(l=>`
-              <div class="flex justify-between text-sm text-textdim">
-                ${l.title}
-                <a href="${l.play}" class="border border-borderp px-2 rounded">Play</a>
+          <div class="font-medium cursor-pointer"
+               onclick="this.nextElementSibling.classList.toggle('hidden')">
+            ${ch.name}
+          </div>
+
+          <div class="hidden mt-3 space-y-2">
+            ${ch.items.map(i=>`
+              <div class="flex justify-between items-center text-sm text-textdim">
+                <span>${i.title}</span>
+                <a href="${i.link}"
+                   class="border border-borderp px-3 py-0.5 rounded hover:bg-borderp hover:text-black transition">
+                   Open
+                </a>
               </div>`).join("")}
           </div>
         </div>`;
